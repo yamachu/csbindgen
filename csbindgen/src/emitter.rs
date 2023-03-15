@@ -68,7 +68,7 @@ use ::std::os::raw::*;
 {file_header}
 
 {methods_string}
-    "
+"
     );
 
     result
@@ -99,7 +99,7 @@ pub fn emit_csharp(
 #else
         const string __DllName = \"{2}\";
 #endif
-        ",
+",
                 options.csharp_if_symbol, options.csharp_if_dll_name, options.csharp_dll_name
             )
         }
@@ -276,7 +276,7 @@ namespace {namespace}
 {structs_string}
 {enum_string}
 }}
-    "
+"
     );
 
     result
