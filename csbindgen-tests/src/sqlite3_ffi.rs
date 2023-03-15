@@ -3606,4 +3606,3 @@ pub unsafe extern "C" fn csbindgen_sqlite3_rtree_query_callback(
     )
 }
 
-    

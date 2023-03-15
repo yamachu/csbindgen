@@ -15,7 +15,7 @@ namespace CsBindgen
 #else
         const string __DllName = "csbindgen_tests";
 #endif
-        
+
 
         [DllImport(__DllName, EntryPoint = "csbindgen_LZ4_versionNumber", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         public static extern int LZ4_versionNumber();
@@ -450,4 +450,3 @@ namespace CsBindgen
 
 
 }
-    

@@ -15,7 +15,7 @@ namespace CsBindgen
 #else
         const string __DllName = "csbindgen_tests";
 #endif
-        
+
 
         [DllImport(__DllName, EntryPoint = "csbindgen_sqlite3_libversion", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         public static extern byte* sqlite3_libversion();
@@ -1110,4 +1110,3 @@ namespace CsBindgen
 
 
 }
-    

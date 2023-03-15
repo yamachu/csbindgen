@@ -1302,4 +1302,3 @@ pub unsafe extern "C" fn csbindgen_LZ4F_resetDecompressionContext(
     )
 }
 
-    

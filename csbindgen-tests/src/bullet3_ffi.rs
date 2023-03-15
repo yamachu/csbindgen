@@ -5940,4 +5940,3 @@ pub unsafe extern "C" fn csbindgen_b3RotateVector(
     )
 }
 
-    
