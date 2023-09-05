@@ -200,4 +200,18 @@ mod tests {
         file.write_all(new_toml.as_bytes()).unwrap();
         file.flush().unwrap();
     }
+
+    #[test]
+    fn test_empty_struct() {
+        let path = std::env::current_dir().unwrap();
+        println!("starting dir: {}", path.display());
+
+        std::env::set_current_dir(path.parent().unwrap()).unwrap();
+
+        Builder::new()
+            .input_extern_file("csbindgen-tests/src/empty_struct.rs")
+            .rust_as_empty_struct("my_special_context")
+            .generate_csharp_file("dotnet-sandbox/empty_struct_bindgen.cs")
+            .unwrap();
+    }
 }
