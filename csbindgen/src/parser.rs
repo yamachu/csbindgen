@@ -366,11 +366,18 @@ pub fn reduce_struct(
     structs: &Vec<RustStruct>,
     field_map: &FieldMap,
     using_types: &HashSet<String>,
+    as_empty_struct: &Vec<String>,
 ) -> Vec<RustStruct> {
     let mut result = Vec::new();
     for item in structs {
         if field_map.exists_in_using_types(&item.struct_name, using_types, 0) {
             result.push(item.clone());
+        } else if as_empty_struct.contains(&item.struct_name) {
+            result.push(RustStruct {
+                struct_name: item.struct_name.to_owned(),
+                fields: vec![],
+                is_union: false,
+            })
         }
     }
 

@@ -79,7 +79,7 @@ pub(crate) fn generate(
         }
     }
 
-    let structs = reduce_struct(&structs, &field_map, &using_types);
+    let structs = reduce_struct(&structs, &field_map, &using_types, &options.rust_as_empty_struct);
     let enums = reduce_enum(&enums, &field_map, &using_types);
 
     let rust = if generate_rust {
