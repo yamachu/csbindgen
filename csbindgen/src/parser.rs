@@ -434,6 +434,25 @@ fn parse_type(t: &syn::Type) -> RustType {
                 }
             }
         }
+        syn::Type::Reference(t) => {
+            // TODO: handling Lifetime
+            if let syn::Type::Path(path) = &*t.elem {
+                return RustType {
+                    type_name: path.path.segments.last().unwrap().ident.to_string(),
+                    type_kind: TypeKind::Pointer(
+                        PointerType::MutPointer,
+                        Box::new(parse_type_path(path)),
+                    ),
+                };
+            } else if let syn::Type::Ptr(t) = &*t.elem {
+                if let syn::Type::Path(path) = &*t.elem {
+                    return RustType {
+                        type_name: path.path.segments.last().unwrap().ident.to_string(),
+                        type_kind: TypeKind::Pointer(PointerType::MutPointerPointer, Box::new(parse_type_path(path))),
+                    };
+                }
+            }
+        }
         syn::Type::Path(t) => {
             return parse_type_path(t);
         }
