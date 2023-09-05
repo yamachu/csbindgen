@@ -448,9 +448,31 @@ fn parse_type(t: &syn::Type) -> RustType {
                 if let syn::Type::Path(path) = &*t.elem {
                     return RustType {
                         type_name: path.path.segments.last().unwrap().ident.to_string(),
-                        type_kind: TypeKind::Pointer(PointerType::MutPointerPointer, Box::new(parse_type_path(path))),
+                        type_kind: TypeKind::Pointer(
+                            PointerType::MutPointerPointer,
+                            Box::new(parse_type_path(path)),
+                        ),
                     };
                 }
+            } else if let syn::Type::Array(t) = &*t.elem {
+                let mut digits = "".to_string();
+                if let syn::Expr::Lit(x) = &t.len {
+                    if let syn::Lit::Int(x) = &x.lit {
+                        digits = x.base10_digits().to_string();
+                    }
+                };
+
+                let type_name = parse_type(&t.elem).type_name; // maybe ok, only retrieve type_name
+                return RustType {
+                    type_name: type_name.clone(),
+                    type_kind: TypeKind::Pointer(
+                        PointerType::ConstPointer,
+                        Box::new(RustType {
+                            type_name: type_name.clone(),
+                            type_kind: TypeKind::FixedArray(digits, None),
+                        }),
+                    ),
+                };
             }
         }
         syn::Type::Path(t) => {
