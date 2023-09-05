@@ -19,6 +19,7 @@ pub struct BindgenOptions {
     pub rust_method_type_path: String,
     pub rust_method_prefix: String,
     pub rust_file_header: String,
+    pub rust_as_empty_struct: Vec<String>,
     pub csharp_namespace: String,
     pub csharp_class_name: String,
     pub csharp_dll_name: String,
@@ -43,6 +44,7 @@ impl Default for Builder {
                 rust_method_type_path: "".to_string(),
                 rust_method_prefix: "csbindgen_".to_string(),
                 rust_file_header: "".to_string(),
+                rust_as_empty_struct: vec![],
                 csharp_namespace: "CsBindgen".to_string(),
                 csharp_class_name: "NativeMethods".to_string(),
                 csharp_dll_name: "".to_string(),
@@ -103,6 +105,14 @@ impl Builder {
     /// `mod lz4;`, `use super::lz4;`
     pub fn rust_file_header<T: Into<String>>(mut self, rust_file_header: T) -> Builder {
         self.options.rust_file_header = rust_file_header.into();
+        self
+    }
+
+    /// Add emit as empty struct name, default is empty
+    pub fn rust_as_empty_struct<T: Into<String>>(mut self, rust_as_empty_struct: T) -> Builder {
+        self.options
+            .rust_as_empty_struct
+            .push(rust_as_empty_struct.into());
         self
     }
 
