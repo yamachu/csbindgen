@@ -12,3 +12,6 @@ pub unsafe extern "C" fn init_my_special_context(src: NonNull<Box<my_special_con
 
 #[no_mangle]
 pub unsafe extern "C" fn free_my_special_context(src: &my_special_context) -> bool {}
+
+#[no_mangle]
+pub unsafe extern "C" fn use_my_special_context(src: &my_special_context, uuid: &[u8; 16]) -> bool {}

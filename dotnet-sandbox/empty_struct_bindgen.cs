@@ -24,6 +24,10 @@ namespace CsBindgen
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool free_my_special_context(my_special_context* src);
 
+        [DllImport(__DllName, EntryPoint = "use_my_special_context", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        [return: MarshalAs(UnmanagedType.U1)]
+        public static extern bool use_my_special_context(my_special_context* src, void/* byte[] */* uuid);
+
 
     }
 
