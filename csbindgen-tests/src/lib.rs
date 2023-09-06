@@ -620,6 +620,8 @@ pub unsafe extern "C" fn init_treat_as_empty_struct_context(_out: NonNull<Box<Tr
 #[no_mangle]
 pub unsafe extern "C" fn free_treat_as_empty_struct_context(_src: *mut TreatAsEmptyStruct) {}
 
+pub extern "C" fn reference_type(_a: &i32, _b: &*mut i32, _c: &[u8; 16], _d: &Context) {}
+
 // fn run_physix(){
 //     unsafe {
 //         let foundation = physx_create_foundation();

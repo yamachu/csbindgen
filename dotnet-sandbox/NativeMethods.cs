@@ -182,6 +182,9 @@ namespace CsBindgen
         [DllImport(__DllName, EntryPoint = "free_treat_as_empty_struct_context", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
         public static extern void free_treat_as_empty_struct_context(TreatAsEmptyStruct* _src);
 
+        [DllImport(__DllName, EntryPoint = "reference_type", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]
+        public static extern void reference_type(int* _a, int** _b, void/* byte[] */* _c, Context* _d);
+
 
     }
 
