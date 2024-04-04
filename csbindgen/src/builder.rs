@@ -253,7 +253,7 @@ impl Builder {
         &self,
         csharp_output_path: P,
     ) -> Result<(), Box<dyn Error>> {
-        if !self.options.csharp_emit_as.is_empty() && self.options.csharp_emit_as == "delegate" && !self.options.csharp_use_function_pointer {
+        if !self.options.csharp_emit_as.is_empty() && self.options.csharp_emit_as == "delegate" && self.options.csharp_use_function_pointer {
             return Err("if set csharp_emit_as 'delegate', must set csharp_use_function_pointer 'false'".into());
         }
 
