@@ -88,6 +88,7 @@ pub fn emit_csharp(
     let class_name = &options.csharp_class_name;
     let method_prefix = &options.csharp_method_prefix;
     let accessibility = &options.csharp_class_accessibility;
+    let emit_as_delegate = options.csharp_emit_as == "delegate";
 
     let mut dll_name = match options.csharp_if_symbol.as_str() {
         "" => format!(
@@ -190,15 +191,23 @@ pub fn emit_csharp(
                 .push_str_ln(format!("        /// <summary>{}</summary>", x).as_str());
         }
 
-        method_list_string.push_str_ln(
-            format!("        [DllImport(__DllName, EntryPoint = \"{entry_point}\", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]").as_str(),
-        );
+        if !emit_as_delegate {
+            method_list_string.push_str_ln(
+                format!("        [DllImport(__DllName, EntryPoint = \"{entry_point}\", CallingConvention = CallingConvention.Cdecl, ExactSpelling = true)]").as_str(),
+            );
+        }
         if return_type == "bool" {
             method_list_string.push_str_ln("        [return: MarshalAs(UnmanagedType.U1)]");
         }
-        method_list_string.push_str_ln(
+        if !emit_as_delegate {
+            method_list_string.push_str_ln(
             format!("        public static extern {return_type} {method_prefix}{method_name}({parameters});").as_str(),
-        );
+            );
+        } else {
+            method_list_string.push_str_ln(
+                format!("        public delegate {return_type} {method_prefix}{method_name}({parameters});").as_str(),
+            );
+        }
         method_list_string.push('\n');
     }
 

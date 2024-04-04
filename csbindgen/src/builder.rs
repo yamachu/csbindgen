@@ -36,6 +36,7 @@ pub struct BindgenOptions {
     pub csharp_type_rename: fn(type_name: String) -> String,
     pub csharp_file_header: String,
     pub csharp_file_footer: String,
+    pub csharp_emit_as: String,
     pub always_included_types: Vec<String>,
 }
 
@@ -65,6 +66,7 @@ impl Default for Builder {
                 csharp_type_rename: identity,
                 csharp_file_header: "".to_string(),
                 csharp_file_footer: "".to_string(),
+                csharp_emit_as: "".to_string(),
                 always_included_types: vec![],
             },
         }
@@ -241,10 +243,20 @@ impl Builder {
         self
     }
 
+    /// configure the emit as for the generated C# code.
+    pub fn csharp_emit_as<T: Into<String>>(mut self, csharp_emit_as: T) -> Builder {
+        self.options.csharp_emit_as = csharp_emit_as.into();
+        self
+    }
+
     pub fn generate_csharp_file<P: AsRef<Path>>(
         &self,
         csharp_output_path: P,
     ) -> Result<(), Box<dyn Error>> {
+        if !self.options.csharp_emit_as.is_empty() && self.options.csharp_emit_as == "delegate" && !self.options.csharp_use_function_pointer {
+            return Err("if set csharp_emit_as 'delegate', must set csharp_use_function_pointer 'false'".into());
+        }
+
         if !self.options.input_bindgen_files.is_empty() {
             let (_, csharp) = generate(GenerateKind::InputBindgen, &self.options)?;
 
