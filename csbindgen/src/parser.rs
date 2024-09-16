@@ -203,16 +203,30 @@ pub fn collect_struct(ast: &syn::File, result: &mut Vec<RustStruct>) {
                 is_union: true,
             });
         } else if let Item::Struct(t) = item {
-            let mut repr = false;
+            let mut repr = None;
             for attr in &t.attrs {
                 let last_segment = attr.path().segments.last().unwrap();
                 if last_segment.ident == "repr" {
-                    repr = true;
+                    attr.parse_nested_meta(|meta| {
+                        repr = meta.path.get_ident().map(|ident| ident.to_string());
+                        Ok(())
+                    })
+                    .unwrap();
                 }
             }
 
-            if repr {
-                if let syn::Fields::Named(f) = &t.fields {
+            if let Some(ident) = repr {
+                if ident == "transparent" {
+                    // FIXME: #[repr(transparent)] struct, treat as Unit struct
+                    // following fields type
+                    let struct_name = t.ident.to_string();
+                    let fields: Vec<FieldMember> = Vec::new();
+                    result.push(RustStruct {
+                        struct_name,
+                        fields,
+                        is_union: false,
+                    });
+                } else if let syn::Fields::Named(f) = &t.fields {
                     let struct_name = t.ident.to_string();
                     let fields = collect_fields(f);
                     result.push(RustStruct {
