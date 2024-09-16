@@ -215,6 +215,17 @@ pub fn collect_struct(ast: &syn::File, result: &mut Vec<RustStruct>) {
                 }
             }
 
+            // doc has cbindgen:ignore, skip emitting
+            let skip_emitting = &t
+                .attrs
+                .iter()
+                .filter(|x| x.path().is_ident("doc"))
+                .filter_map(|x| get_str_from_meta(&x.meta))
+                .any(|x| x.trim() == "cbindgen:ignore");
+            if *skip_emitting {
+                continue;
+            }
+
             if let Some(ident) = repr {
                 if ident == "transparent" {
                     // FIXME: #[repr(transparent)] struct, treat as Unit struct
